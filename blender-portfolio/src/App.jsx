@@ -12,12 +12,16 @@ const projects = [
 
 function App() {
   const [scrollY, setScrollY] = useState(0);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => setScrollY(window.scrollY);
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+
+  const toggleSidebar = () => setIsSidebarOpen(!isSidebarOpen);
+  const closeSidebar = () => setIsSidebarOpen(false);
 
   return (
     <div className="app-container">
@@ -27,11 +31,33 @@ function App() {
       }}>
         <div className="container nav-content">
           <div className="logo">ADAM<span style={{ color: 'var(--accent)' }}>.</span>HA</div>
-          <nav className="nav-links">
+
+          {/* Desktop Nav */}
+          <nav className="nav-links desktop-only">
             <a href="#work">Work</a>
             <a href="#about">About</a>
+            <a href="#projectLinks">Links</a>
             <a href="#contact">Contact</a>
           </nav>
+
+          {/* Mobile Menu Toggle */}
+          <button className="mobile-menu-toggle" onClick={toggleSidebar} aria-label="Toggle menu">
+            <span className="hamburger-line"></span>
+            <span className="hamburger-line"></span>
+            <span className="hamburger-line"></span>
+          </button>
+
+          {/* Mobile Sidebar */}
+          <div className={`sidebar-overlay ${isSidebarOpen ? 'open' : ''}`} onClick={closeSidebar}></div>
+          <div className={`mobile-sidebar ${isSidebarOpen ? 'open' : ''}`}>
+            <button className="close-btn" onClick={closeSidebar}>&times;</button>
+            <nav className="mobile-nav-links">
+              <a href="#work" onClick={closeSidebar}>Work</a>
+              <a href="#about" onClick={closeSidebar}>About</a>
+              <a href="#projectLinks" onClick={closeSidebar}>Links</a>
+              <a href="#contact" onClick={closeSidebar}>Contact</a>
+            </nav>
+          </div>
         </div>
       </header>
 
